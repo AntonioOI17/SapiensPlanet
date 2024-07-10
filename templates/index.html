@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <a href="#">Inicio</a>
+            <a href="#">Acerca de</a>
+            <a href="#">Servicios</a>
+            <a href="#">Contacto</a>
+        </nav>
+        <form action="#" class="search-bar">
+            <input type="text" placeholder="Buscar...">
+            <button type="submit"><i class='bx bx-search-alt-2'></i></button>
+        </form>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            <h2 class="logo">PlanetaSapiens</h2>
+
+            <div class="text-sci">
+                <h2>¡Bienvenido!<br> <span>A nuestro Sitio Web</span></h2>
+                <p></p>
+                <div class="social-icons">
+                    <a href="#"><i class='bx bxl-facebook-circle'></i></a>
+                    <a href="#"><i class='bx bxl-instagram'></i></a>
+                    <a href="#"><i class='bx bxl-twitter'></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="logreg-box">
+            <div class="form-box login">
+                <form name="loginForm" action="{{ url_for('login') }}" method="POST" onsubmit="return validateLoginForm()">
+                    <h2>Iniciar Sesión</h2>
+                    <div class="input-box">
+                        <span class="icon"><i class='bx bxs-envelope'></i></span>
+                        <input type="email" name="username" required>
+                        <label>Correo</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><i class='bx bxs-lock-alt'></i></span>
+                        <input type="password" name="password" required>
+                        <label>Contraseña</label>
+                    </div>
+                    <div class="remember-forgot">
+                        <label><input type="checkbox">Recuerda</label>
+                        <a href="#">¿Ha olvidado su contraseña?</a>
+                    </div>
+                    <button type="submit" class="btn">Iniciar Sesión</button>
+                    <div class="login-register">
+                        <p>¿Aún no tiene una cuenta? <a href="#" class="register-link">Regístrate</a></p>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-box register">
+                <form name="registerForm" action="{{ url_for('register') }}" method="POST" onsubmit="return validateRegisterForm()">
+                    <h2>Regístrate</h2>
+                    <div class="input-box">
+                        <span class="icon"><i class='bx bx-user-circle'></i></span>
+                        <input type="text" name="username" required>
+                        <label>Nombre</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><i class='bx bxs-user'></i></span>
+                        <input type="text" name="apellido_pa" required>
+                        <label>Apellido Paterno</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><i class='bx bxs-user'></i></span>
+                        <input type="text" name="apellido_ma" required>
+                        <label>Apellido Materno</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><i class='bx bxs-envelope'></i></span>
+                        <input type="email" name="email" required>
+                        <label>Correo</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><i class='bx bxs-lock-alt'></i></span>
+                        <input type="password" name="password" required>
+                        <label>Contraseña</label>
+                    </div>
+                    <div class="remember-forgot">
+                        <label><input type="checkbox" required>Está de acuerdo con los términos y condiciones</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon"><i class='bx bxs-user'></i></span>
+                        <select name="id_tipo_usuario" required>
+                            {% for tipo_usuario in tipos_usuarios %}
+                                <option value="{{ tipo_usuario.idTipo_usuario }}">{{ tipo_usuario.descripcion }}</option>
+                            {% endfor %}
+                        </select>
+                        <label>Tipo de Usuario</label>
+                    </div>
+                    <button type="submit" class="btn">Registrarse</button>
+                    <div class="login-register">
+                        <p>¿Ya tiene una cuenta? <a href="#" class="login-link">Iniciar Sesión</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        function validateLoginForm() {
+            var email = document.forms["loginForm"]["username"].value;
+            var password = document.forms["loginForm"]["password"].value;
+
+            if (!isValidEmail(email)) {
+                alert("Ingrese un correo electrónico válido.");
+                return false;
+            }
+
+            if (password.length < 6) {
+                alert("La contraseña debe tener al menos 6 caracteres.");
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateRegisterForm() {
+            var username = document.forms["registerForm"]["username"].value;
+            var apellido_pa = document.forms["registerForm"]["apellido_pa"].value;
+            var apellido_ma = document.forms["registerForm"]["apellido_ma"].value;
+            var email = document.forms["registerForm"]["email"].value;
+            var password = document.forms["registerForm"]["password"].value;
+            var id_tipo_usuario = document.forms["registerForm"]["id_tipo_usuario"].value;
+
+            if (username.trim() == "") {
+                alert("Ingrese su nombre.");
+                return false;
+            }
+
+            if (apellido_pa.trim() == "") {
+                alert("Ingrese su apellido paterno.");
+                return false;
+            }
+
+            if (apellido_ma.trim() == "") {
+                alert("Ingrese su apellido materno.");
+                return false;
+            }
+
+            if (!isValidEmail(email)) {
+                alert("Ingrese un correo electrónico válido.");
+                return false;
+            }
+
+            if (password.length < 6) {
+                alert("La contraseña debe tener al menos 6 caracteres.");
+                return false;
+            }
+
+            if (id_tipo_usuario == "") {
+                alert("Seleccione un tipo de usuario.");
+                return false;
+            }
+
+            return true;
+        }
+
+        function isValidEmail(email) {
+            var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+    </script>
+</body>
+</html>
+
+
+

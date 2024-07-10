@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Curso</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="date"] {
+            width: calc(100% - 22px); /* Considera el padding y el border */
+        }
+
+        button {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Agregar Nuevo Curso</h1>
+        <form name="cursoForm" action="{{ url_for('agregar_curso') }}" method="POST" onsubmit="return validateCursoForm()">
+            <div class="form-group">
+                <label for="titulo">Título:</label>
+                <input type="text" id="titulo" name="titulo" required>
+                <div id="titulo-error" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="contenido">Contenido:</label>
+                <textarea id="contenido" name="contenido"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="fecha_publicacion">Fecha de Publicación:</label>
+                <input type="date" id="fecha_publicacion" name="fecha_publicacion" required>
+                <div id="fecha-error" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="estatus">Estatus:</label>
+                <select id="estatus" name="estatus" required>
+                    <option value="1">Activo</option>
+                    <option value="0">Inactivo</option>
+                </select>
+            </div>
+            <button type="submit">Agregar Curso</button>
+        </form>
+    </div>
+
+    <script>
+        function validateCursoForm() {
+            var titulo = document.forms["cursoForm"]["titulo"].value;
+            var fecha_publicacion = document.forms["cursoForm"]["fecha_publicacion"].value;
+
+            // Validación de título
+            if (titulo.trim() == "") {
+                document.getElementById("titulo-error").innerHTML = "Por favor, ingrese el título del curso.";
+                return false;
+            } else {
+                document.getElementById("titulo-error").innerHTML = "";
+            }
+
+            // Validación de fecha de publicación
+            var currentDate = new Date();
+            var selectedDate = new Date(fecha_publicacion);
+
+            if (fecha_publicacion.trim() == "") {
+                document.getElementById("fecha-error").innerHTML = "Por favor, seleccione la fecha de publicación.";
+                return false;
+            } else if (selectedDate < currentDate) {
+                document.getElementById("fecha-error").innerHTML = "La fecha de publicación no puede ser anterior a hoy.";
+                return false;
+            } else {
+                document.getElementById("fecha-error").innerHTML = "";
+            }
+
+            return true;
+        }
+    </script>
+</body>
+</html>
+
+
+
